@@ -179,6 +179,10 @@ FOUNDATION_EXPORT const CGFloat kJSQMessagesCollectionViewAvatarSizeDefault;
  */
 @property (assign, nonatomic) NSUInteger cacheLimit;
 
+@property (strong, nonatomic) NSCache *messageBubbleCache;
+
+@property (assign, nonatomic, readonly) NSUInteger bubbleImageAssetWidth;
+
 /**
  *  Computes and returns the size of the `messageBubbleImageView` property of a `JSQMessagesCollectionViewCell`
  *  at the specified indexPath. The returned size contains the required dimensions to display the entire message contents. 
@@ -198,5 +202,7 @@ FOUNDATION_EXPORT const CGFloat kJSQMessagesCollectionViewAvatarSizeDefault;
  *  @return The size of the item displayed at indexPath.
  */
 - (CGSize)sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
+
+- (CGSize)jsq_avatarSizeForIndexPath:(NSIndexPath *)indexPath;
 
 @end
