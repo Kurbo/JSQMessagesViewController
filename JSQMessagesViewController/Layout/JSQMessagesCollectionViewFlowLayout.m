@@ -40,14 +40,10 @@ const CGFloat kJSQMessagesCollectionViewAvatarSizeDefault = 30.0f;
 
 @interface JSQMessagesCollectionViewFlowLayout ()
 
-@property (strong, nonatomic) NSCache *messageBubbleCache;
-
 @property (strong, nonatomic) UIDynamicAnimator *dynamicAnimator;
 @property (strong, nonatomic) NSMutableSet *visibleIndexPaths;
 
 @property (assign, nonatomic) CGFloat latestDelta;
-
-@property (assign, nonatomic, readonly) NSUInteger bubbleImageAssetWidth;
 
 - (void)jsq_configureFlowLayout;
 
@@ -58,7 +54,6 @@ const CGFloat kJSQMessagesCollectionViewAvatarSizeDefault = 30.0f;
 - (void)jsq_resetDynamicAnimator;
 
 - (void)jsq_configureMessageCellLayoutAttributes:(JSQMessagesCollectionViewLayoutAttributes *)layoutAttributes;
-- (CGSize)jsq_avatarSizeForIndexPath:(NSIndexPath *)indexPath;
 
 - (UIAttachmentBehavior *)jsq_springBehaviorWithLayoutAttributesItem:(UICollectionViewLayoutAttributes *)item;
 - (void)jsq_addNewlyVisibleBehaviorsFromVisibleItems:(NSArray *)visibleItems;
