@@ -22,9 +22,7 @@
 
 - (NSString *)jsq_stringByTrimingWhitespace
 {
-    NSMutableCharacterSet *characterSet = [NSMutableCharacterSet characterSetWithCharactersInString:@"￼"];//ignoring Unicode Character 'OBJECT REPLACEMENT CHARACTER' (U+FFFC)
-    [characterSet formUnionWithCharacterSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    return [self stringByTrimmingCharactersInSet:characterSet];
+    return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 @end
