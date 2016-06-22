@@ -23,7 +23,9 @@
 #import "JSQMessagesCollectionViewLayoutAttributes.h"
 
 #import "UIView+JSQMessages.h"
-#import "UIDevice+JSQMessages.h"
+
+
+static NSMutableSet *jsqMessagesCollectionViewCellActions = nil;
 
 
 @interface JSQMessagesCollectionViewCell ()
@@ -66,10 +68,17 @@
 @end
 
 
-
 @implementation JSQMessagesCollectionViewCell
 
 #pragma mark - Class methods
+
++ (void)initialize
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        jsqMessagesCollectionViewCellActions = [NSMutableSet new];
+    });
+}
 
 + (UINib *)nib
 {
@@ -84,6 +93,11 @@
 + (NSString *)mediaCellReuseIdentifier
 {
     return [NSString stringWithFormat:@"%@_JSQMedia", NSStringFromClass([self class])];
+}
+
++ (void)registerMenuAction:(SEL)action
+{
+    [jsqMessagesCollectionViewCellActions addObject:NSStringFromSelector(action)];
 }
 
 #pragma mark - Initialization
@@ -197,28 +211,64 @@
 - (void)setHighlighted:(BOOL)highlighted
 {
     [super setHighlighted:highlighted];
+    self.avatarImageView.highlighted = highlighted;
     self.messageBubbleImageView.highlighted = highlighted;
 }
 
 - (void)setSelected:(BOOL)selected
 {
     [super setSelected:selected];
+    self.avatarImageView.highlighted = selected;
     self.messageBubbleImageView.highlighted = selected;
 }
 
-//  FIXME: radar 18326340
-//         remove when fixed
-//         hack for Xcode6 / iOS 8 SDK rendering bug that occurs on iOS 7.x
-//         see issue #484
-//         https://github.com/jessesquires/JSQMessagesViewController/issues/484
-//
-- (void)setBounds:(CGRect)bounds
-{
-    [super setBounds:bounds];
 
-    if ([UIDevice jsq_isCurrentDeviceBeforeiOS8]) {
-        self.contentView.frame = bounds;
+#pragma mark - Menu actions
+
+- (BOOL)respondsToSelector:(SEL)aSelector
+{
+    if ([jsqMessagesCollectionViewCellActions containsObject:NSStringFromSelector(aSelector)]) {
+        return YES;
     }
+
+    return [super respondsToSelector:aSelector];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    // do nothing
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    // do nothing
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    // do nothing
+}
+
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    // do nothing
+}
+
+- (void)forwardInvocation:(NSInvocation *)anInvocation
+{
+    if ([jsqMessagesCollectionViewCellActions containsObject:NSStringFromSelector(anInvocation.selector)]) {
+        __unsafe_unretained id sender;
+        [anInvocation getArgument:&sender atIndex:0];
+        [self.delegate messagesCollectionViewCell:self didPerformAction:anInvocation.selector withSender:sender];
+    }
+    else {
+        [super forwardInvocation:anInvocation];
+    }
+}
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
+{
+    if ([jsqMessagesCollectionViewCellActions containsObject:NSStringFromSelector(aSelector)]) {
+        return [NSMethodSignature signatureWithObjCTypes:"v@:@"];
+    }
+
+    return [super methodSignatureForSelector:aSelector];
 }
 
 #pragma mark - Setters
@@ -335,8 +385,8 @@
     if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]) {
         return CGRectContainsPoint(self.messageBubbleContainerView.frame, touchPt);
     }
-
-    return YES;
+    
+    return NO;
 }
 
 @end

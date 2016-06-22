@@ -46,31 +46,31 @@
 - (void)jsq_configureCollectionView
 {
     [self setTranslatesAutoresizingMaskIntoConstraints:NO];
-    
+
     self.backgroundColor = [UIColor whiteColor];
-    self.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
+    self.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     self.alwaysBounceVertical = YES;
     self.bounces = YES;
-    
+
     [self registerNib:[JSQMessagesCollectionViewCellIncoming nib]
-          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellIncoming cellReuseIdentifier]];
-    
+forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellIncoming cellReuseIdentifier]];
+
     [self registerNib:[JSQMessagesCollectionViewCellOutgoing nib]
-          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellOutgoing cellReuseIdentifier]];
-    
+forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellOutgoing cellReuseIdentifier]];
+
     [self registerNib:[JSQMessagesCollectionViewCellIncoming nib]
-          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellIncoming mediaCellReuseIdentifier]];
-    
+forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellIncoming mediaCellReuseIdentifier]];
+
     [self registerNib:[JSQMessagesCollectionViewCellOutgoing nib]
-          forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellOutgoing mediaCellReuseIdentifier]];
-    
+forCellWithReuseIdentifier:[JSQMessagesCollectionViewCellOutgoing mediaCellReuseIdentifier]];
+
     [self registerNib:[JSQMessagesTypingIndicatorFooterView nib]
-          forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
-          withReuseIdentifier:[JSQMessagesTypingIndicatorFooterView footerReuseIdentifier]];
-    
+forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+  withReuseIdentifier:[JSQMessagesTypingIndicatorFooterView footerReuseIdentifier]];
+
     [self registerNib:[JSQMessagesLoadEarlierHeaderView nib]
-          forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-          withReuseIdentifier:[JSQMessagesLoadEarlierHeaderView headerReuseIdentifier]];
+forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+  withReuseIdentifier:[JSQMessagesLoadEarlierHeaderView headerReuseIdentifier]];
 
     _typingIndicatorDisplaysOnLeft = YES;
     _typingIndicatorMessageBubbleColor = [UIColor jsq_messageBubbleLightGrayColor];
@@ -104,6 +104,7 @@
 
     [footerView configureWithEllipsisColor:self.typingIndicatorEllipsisColor
                         messageBubbleColor:self.typingIndicatorMessageBubbleColor
+                                  animated:YES
                        shouldDisplayOnLeft:self.typingIndicatorDisplaysOnLeft
                          forCollectionView:self];
 
@@ -141,7 +142,7 @@
     if (indexPath == nil) {
         return;
     }
-    
+
     [self.delegate collectionView:self
             didTapAvatarImageView:cell.avatarImageView
                       atIndexPath:indexPath];
@@ -153,7 +154,7 @@
     if (indexPath == nil) {
         return;
     }
-    
+
     [self.delegate collectionView:self didTapMessageBubbleAtIndexPath:indexPath];
 }
 
@@ -163,10 +164,23 @@
     if (indexPath == nil) {
         return;
     }
-    
+
     [self.delegate collectionView:self
             didTapCellAtIndexPath:indexPath
                     touchLocation:position];
+}
+
+- (void)messagesCollectionViewCell:(JSQMessagesCollectionViewCell *)cell didPerformAction:(SEL)action withSender:(id)sender
+{
+    NSIndexPath *indexPath = [self indexPathForCell:cell];
+    if (indexPath == nil) {
+        return;
+    }
+
+    [self.delegate collectionView:self
+                    performAction:action
+               forItemAtIndexPath:indexPath
+                       withSender:sender];
 }
 
 @end

@@ -24,6 +24,7 @@
 @protocol JSQMessageBubbleImageDataSource;
 @protocol JSQMessageAvatarImageDataSource;
 
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  An object that adopts the `JSQMessagesCollectionViewDataSource` protocol is responsible for providing the data and views
@@ -55,7 +56,7 @@
 /**
  *  Asks the data source for the message data that corresponds to the specified item at indexPath in the collectionView.
  *
- *  @param collectionView The object representing the collection view requesting this information.
+ *  @param collectionView The collection view requesting this information.
  *  @param indexPath      The index path that specifies the location of the item.
  *
  *  @return An initialized object that conforms to the `JSQMessageData` protocol. You must not return `nil` from this method.
@@ -63,9 +64,18 @@
 - (id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath;
 
 /**
+ *  Notifies the data source that the item at indexPath has been deleted. 
+ *  Implementations of this method should remove the item from the data source.
+ *
+ *  @param collectionView The collection view requesting this information.
+ *  @param indexPath      The index path that specifies the location of the item.
+ */
+- (void)collectionView:(JSQMessagesCollectionView *)collectionView didDeleteMessageAtIndexPath:(NSIndexPath *)indexPath;
+
+/**
  *  Asks the data source for the message bubble image data that corresponds to the specified message data item at indexPath in the collectionView.
  *
- *  @param collectionView The object representing the collection view requesting this information.
+ *  @param collectionView The collection view requesting this information.
  *  @param indexPath      The index path that specifies the location of the item.
  *
  *  @return An initialized object that conforms to the `JSQMessageBubbleImageDataSource` protocol. You may return `nil` from this method if you do not
@@ -80,12 +90,12 @@
  *  @see JSQMessagesBubbleImageFactory.
  *  @see JSQMessagesCollectionViewFlowLayout.
  */
-- (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (nullable id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath;
 
 /**
  *  Asks the data source for the avatar image data that corresponds to the specified message data item at indexPath in the collectionView.
  *
- *  @param collectionView The object representing the collection view requesting this information.
+ *  @param collectionView The collection view requesting this information.
  *  @param indexPath      The index path that specifies the location of the item.
  *
  *  @return A initialized object that conforms to the `JSQMessageAvatarImageDataSource` protocol. You may return `nil` from this method if you do not want
@@ -97,7 +107,7 @@
  *  @see JSQMessagesAvatarImageFactory.
  *  @see JSQMessagesCollectionViewFlowLayout.
  */
-- (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (nullable id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath;
 
 @optional
 
@@ -105,7 +115,7 @@
  *  Asks the data source for the text to display in the `cellTopLabel` for the specified
  *  message data item at indexPath in the collectionView.
  *
- *  @param collectionView The object representing the collection view requesting this information.
+ *  @param collectionView The collection view requesting this information.
  *  @param indexPath      The index path that specifies the location of the item.
  *
  *  @return A configured attributed string or `nil` if you do not want text displayed for the item at indexPath.
@@ -119,7 +129,7 @@
  *  Asks the data source for the text to display in the `messageBubbleTopLabel` for the specified
  *  message data item at indexPath in the collectionView.
  *
- *  @param collectionView The object representing the collection view requesting this information.
+ *  @param collectionView The collection view requesting this information.
  *  @param indexPath      The index path that specifies the location of the item.
  *
  *  @return A configured attributed string or `nil` if you do not want text displayed for the item at indexPath.
@@ -127,13 +137,13 @@
  *
  *  @see JSQMessagesCollectionViewCell.
  */
-- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath;
+- (nullable NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath;
 
 /**
  *  Asks the data source for the text to display in the `cellBottomLabel` for the the specified
  *  message data item at indexPath in the collectionView.
  *
- *  @param collectionView The object representing the collection view requesting this information.
+ *  @param collectionView The collection view requesting this information.
  *  @param indexPath      The index path that specifies the location of the item.
  *
  *  @return A configured attributed string or `nil` if you do not want text displayed for the item at indexPath.
@@ -141,6 +151,8 @@
  *
  *  @see JSQMessagesCollectionViewCell.
  */
-- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath;
+- (nullable NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
+
+NS_ASSUME_NONNULL_END
