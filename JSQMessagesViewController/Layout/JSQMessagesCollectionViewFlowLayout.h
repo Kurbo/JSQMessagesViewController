@@ -214,6 +214,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (CGSize)sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
 
+- (CGSize)jsq_avatarSizeForIndexPath:(NSIndexPath *)indexPath;
+
 @end
 
 NS_ASSUME_NONNULL_END
