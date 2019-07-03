@@ -20,7 +20,7 @@
 
 #import "UIView+JSQMessages.h"
 
-const CGFloat kJSQMessagesToolbarContentViewHorizontalSpacingDefault = 20.0f;
+const CGFloat kJSQMessagesToolbarContentViewHorizontalSpacingDefault = 8.0f;
 
 
 @interface JSQMessagesToolbarContentView ()
@@ -80,7 +80,8 @@ const CGFloat kJSQMessagesToolbarContentViewHorizontalSpacingDefault = 20.0f;
     }
 
     if (!leftBarButtonItem) {
-        _leftBarButtonItem = nil;        
+        _leftBarButtonItem = nil;
+        self.leftHorizontalSpacingConstraint.constant = 0.0f;
         self.leftBarButtonItemWidth = 0.0f;
         self.leftBarButtonContainerView.hidden = YES;
         return;
